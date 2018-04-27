@@ -5,13 +5,14 @@ from django.db import models
 class Comentario(models.Model):
 	contenido = models.TextField()
 	usuario = models.CharField(max_length = 16)
-	
+	def __str__(self):
+		return self.contenido + "User:" + self.usuario
 
 class Museo(models.Model):
     nombre = models.CharField(max_length=128)
     descripcion = models.TextField()
-    horario = models.TimeField()
-    direccion = models.TextField()
+    horario = models.TextField()
+    descrip = models.TextField()
     enlace = models.URLField(max_length=200)
     comentarios = models.ForeignKey(Comentario)
     accesibilidad = models.PositiveSmallIntegerField()
@@ -33,6 +34,8 @@ class Museo(models.Model):
     latitud = models.DecimalField(max_digits =20 ,decimal_places = 18)
     longitud = models.DecimalField(max_digits =20 ,decimal_places = 18)
     telefono = models.IntegerField()
+    numberpk = models.IntegerField()
+	
 	
 
 
@@ -45,8 +48,10 @@ class Museo(models.Model):
 class Favoritos(models.Model):
 	usuario = models.CharField(max_length = 32)
 	museo = models.ManyToManyField(Museo) 
-	comentarios = models.ForeignKey(Comentario)
-	titulo = models.CharField(max_length = 32)
+	
+
+
+
 
 	
 	
