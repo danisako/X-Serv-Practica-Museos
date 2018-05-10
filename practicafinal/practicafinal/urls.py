@@ -23,6 +23,16 @@ from django.views.generic import RedirectView
 urlpatterns = [
     url(r'^$',  'museos.views.barra'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^login',login),
-    url(r'^logout', logout), 
+	url(r'^login',login),
+	url(r'^logout', logout),
+	url(r'^accounts/profile', 'museos.views.redirect'),
+	url(r'^museos/(.+)$', 'museos.views.paginamuseo'),
+	url(r'^museos', 'museos.views.museos'),
+	#url(r'^favorito/(.d)$','museos.views.favorito'),
+	url(r'^register', 'museos.views.usuarios', name = "Crear un usuario"),
+	#url(r'^(.+)$','museos.views.usuario'),
+	url(r'static/(.*)$', serve, {'document_root': 'templates/plantilla'}),
+	
+	
+	
 ]

@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 
@@ -48,8 +50,15 @@ class Comentario(models.Model):
 	museo = models.ForeignKey('Museo')
 	def __str__(self):
 		return self.contenido + "User:" + self.usuario + "MUSEO: " +self.museo
+
+
 	
+class CSS(models.Model):
+	nombre = models.ForeignKey(User)
+	titulo = models.TextField(default="")
+	color = models.CharField(default="blue", max_length=32)
+	tamano = models.IntegerField(default=15)
 
 class Favoritos(models.Model):
-	usuario = models.CharField(max_length = 32)
+	usuario = models.ForeignKey(User)
 	museo = models.ForeignKey('Museo')
