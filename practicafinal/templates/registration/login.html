@@ -1,12 +1,14 @@
 <html><body>
-<form method="post" action="/login">
-{% csrf_token %}
-<table>
-<tr><td>Nombre de usuario</td>
-<td>{{ form.username }}</td></tr>
-<tr><td>Contraseña</td>
-<td>{{ form.password }}</td></tr>
-</table>
-<input type="submit" value="LOGIN" />
-</form>
+
+
+	<form method="POST" action="/login">
+	{% csrf_token %}
+	<table>
+	<tr><td>Nombre de usuario</td>
+	<td>{{ form.username }}</td></tr>
+	<tr><td>Contraseñaw</td>
+	<td>{{ form.password }}</td></tr>
+	</table>
+	<input type="submit" value="LOGIN" />
+	</form>
 </body></html>

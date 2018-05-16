@@ -1,15 +1,17 @@
 {%extends "plantilla/index.html" %}
 {% block title %}
-	<a href="/">Inicio</a>
+	<h2>REGISTRATE AQUI!</h2>
+	
 	{{ content | safe}}
 {% endblock %}
 
 
 {% block content %}
-<h1>Rellena el siguiente formulario:</h1>
-    {{ content|safe }}
+	<div>
+		<h2>REGISTRATE AQUI!</h2>
+
+    {{ content }}
+	</div>
 {% endblock %}
 
-{% block formularios %}
-    {{ formulario|safe}}
-{% endblock %}
+

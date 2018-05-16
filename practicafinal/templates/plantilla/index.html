@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html>
@@ -6,7 +7,8 @@
 <title>App Museos</title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
-<link rel="stylesheet" type="text/css" href="/templates/static/default.css" />
+<link rel="stylesheet" type="text/css" href="/templates/static/1.css"/>
+<link rel="shortcut icon" href="http://kathedesing.com/wp-content/uploads/2017/05/icono-7.png" type="image/icon" />
 </head>
 <body>
 
@@ -19,51 +21,80 @@
 		<div id="headercontent">
 			<h1>APP MUSEOS!!<sup>1.0</sup></h1>
 			<h2>aplicacion Django para museos de Madrid</h2>
+			
 		</div>
 	</div>
 
 
-	<div id="headerpic"></div>
+	<div id="banner">
+		<img src="http://www.reddemuseos.unlp.edu.ar/uploads/assets/banner_museos_large.png" width="100%" height="100"/></div>
 	<div class="header"><img alt="" style="float:right; " src="https://teleoposiciones.es/wp-content/uploads/2017/12/Programa-6-museos-Ministerio-Defensa.jpeg" width="30%" height="250"/>
 
 	
 	<div id="menu">
 		<!-- HINT: Set the class of any menu link below to "active" to make it appear active -->
 		<ul>
-			<li><a href="#">Home</a></li>
-			<li><a href="#" class="active">News</a></li>
-			<li><a href="#">Blog</a></li>
-			<li><a href="#">Gallery</a></li>
+			<li><a href="/">Home</a></li>
+			<li><a href="/museos">Todos</a></li>
+			<li><a href="/register">Registrarse</a></li>
 			<li><a href="#">About</a></li>
 			<li><a href="#">Contact</a></li>
-		</ul>
 	</div>
-	<div id="menubottom"></div>
-
+	
+	
+	
 	
 	<div id="content">
-		{% csrf_token %}
-		<form method="post" action="/accounts/profile">
-					<td>USER</td><input type="text" class="text" maxlength="64" name="keywords" 
-					
-					<td>Contraseña</td><input type="password" class="password" maxlength="64" name="contraseña" 
-					</table>
-					<input type="submit" value="LOGIN" />
-					</form>
-					<ul><h2>{{ users | safe}}</h2>
-					<ul><h2>{{ content | safe}}</h2>
-					
+	<div id= "content-left">
+		<div id="acces">
+			<p><strong>
+						{% block acces %}
+						<ul>
+							{{accesibles|safe}}
+						</ul>
+						{% endblock %}
+			</strong></p>	
+</div>	
+		<p><strong>
+						{% block cargar %}
+						
+							{{cargar|safe}}
+						
+						{% endblock %}
+			</strong></p>	
+</div>	
+	</div>
+	<div id="content-right">
+					{% block user %}
+					{% csrf_token %}
+					{% if request.user.is_authenticated %}
+						<h4>Bienvenido {{user.username}}</h4> 
+						<form action="/logout">
+						<input type="submit" value="Salir">
+	</form> 
+
+					{% else %}
+					<h1>Identifícate</h1>
+					<div class="userbox">
+			        <div class="userform">
+								
+							    {{login|safe}}
+			        </div>
+					{% endif %}
+					{% endblock %}
+			    </div>
+</div>
+
+	{% csrf_token %}
 		<!-- Normal content: Stuff that's not going to be put in the left or right column. -->
 		<div id="normalcontent">
-			<h3><strong>Zenlike</strong><sup>1.0</sup> <span>by NodeThirtyThree</span></h3>
+			<ul><h3><strong>{{ content | safe}}</strong></h3>
+			<img src="images/pic1.jpg" class="left" />
 			<div class="contentarea">
 				<!-- Normal content area start -->
 
-				<img src="images/pic1.jpg" class="left" alt="A chinese lion statue" />
-				<p>Zenlike<sup>1.0</sup> is a free, lightweight, tableless, fluid W3C-compliant website design by <a href="http://www.nodethirtythree.com/">NodeThirtyThree Design</a>. All photos came from <a href="http://www.pdphoto.org/">PDPhoto</a> and the background texture is from <a href="http://www.mayang.com/textures/">Mayang's texture site</a>. You're free to dissect, manipulate and use it to your heart's content. We only ask that you link back to <a href="http://www.nodethirtythree.com/">our site</a> in some way. If you find this design useful, feel free to let us know :)</p>
-				<p>You can find more of our free work at this site or <a href="http://www.nodethirtythree.com/">our site</a>, or some of our commercial work on <a href="http://www.4templates.com/?aff=n33">4Templates.com</a>, a commercial website template site.</p>
-
-				<!-- Normal content area end -->
+				<img src="images/pic1.jpg" class="left" />
+				
 			</div>
 		</div>
 
@@ -141,6 +172,7 @@
 			<div>
 				<h4>Nullam Dolore</h4>
 				<div class="contentarea">
+						<ul><h2>{{ users | safe}}</h2>
 					<ul class="linklist">
 						<li><a href="#">Volutpat at varius sed</a></li>
 						<li><a href="#">Sollicitudin et arcu</a></li>
@@ -164,11 +196,13 @@
 	</div>
 
 	<div id="footer">
-			<div class="left">&copy; 2006 Your Website Name. All rights reserved.</div>
-			<div class="right">Design by <a href="http://www.nodethirtythree.com/">NodeThirtyThree Design</a></div>
-	</div>
-	
+			
+				<p>Esta aplicación utiliza datos del portal de datos abiertos de la ciudad de Madrid. © Copyright
+				Pagina con los datos del Ayuntamiento de Madrid: <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=118f2fdbecc63410VgnVCM1000000b205a0aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default"> Enlace</a>.Descripcion del <a href="https://datos.madrid.es/egob/catalogo/201132-0-museos.xml">fichero XML</a></p>
 </div>
+		
+	
+
 
 </body>
 </html>

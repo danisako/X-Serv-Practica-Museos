@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+{%extends "plantilla/index.html" %}
+
+
+{% block title %}
+	<a href="/">Inicio</a>
+	<div>
+		{{ usuario | safe}}
+		<h1>HOLA!</h1>
+
+</div>
+	{{ content | safe}}
+{% endblock %}
+
+
+

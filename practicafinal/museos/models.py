@@ -32,7 +32,7 @@ class Museo(models.Model):
     longitud = models.TextField(default = "")
     telefono = models.TextField()
     numberpk = models.TextField()
-
+	
     valoracion = models.IntegerField(default = 0)
     comentarios = models.IntegerField(default = 0)
 	
@@ -62,3 +62,6 @@ class CSS(models.Model):
 class Favoritos(models.Model):
 	usuario = models.ForeignKey(User)
 	museo = models.ForeignKey('Museo')
+	titulo = models.CharField(max_length = 128)
+	fecha = models.DateTimeField(auto_now = True)
+	
