@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 
 {%extends "plantilla/index.html" %}
-
-
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/templates/static/2.css"/>
+<link rel="favicon" href="http://kathedesing.com/wp-content/uploads/2017/05/icono-7.png" type="image/icon" />
 {% block title %}
 	<a href="/">Inicio</a>
 	<div>
-		{{ usuario | safe}}
+		{{ title | safe}}
 		<h1>HOLA!</h1>
 
 </div>
+	
 	{{ content | safe}}
+	
+	
 {% endblock %}
-
-
+</head>
+</html>
 

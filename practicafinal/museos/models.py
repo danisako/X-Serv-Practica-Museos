@@ -53,9 +53,8 @@ class Comentario(models.Model):
 
 
 	
-class CSS(models.Model):
+class Cambiarcss(models.Model):
 	nombre = models.ForeignKey(User)
-	titulo = models.TextField(default="")
 	color = models.CharField(default="blue", max_length=32)
 	tamano = models.IntegerField(default=15)
 

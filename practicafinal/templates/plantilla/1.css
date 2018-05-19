@@ -11,18 +11,6 @@ padding: 0em;
 margin: 0em;
 }
 
-body
-{
-background: #000000 url('images/bg1.jpg');
-padding: 35px 0px 35px 0px;
-}
-
-body,input
-{
-font-size: 10pt;
-font-family: "georgia", "times new roman", serif;
-color: #333333;
-}
 
 p
 {
@@ -33,7 +21,7 @@ text-align: justify;
 
 a
 {
-color: #B96D00;
+color: #000000;
 text-decoration: underline;
 }
 
@@ -107,6 +95,7 @@ clear: both;
 {
 position: relative;
 height: 1px;
+background: #FFFFFF;
 border-bottom: solid 1px #eaeaea;
 margin: 2.0em 0em 2.0em 0em;
 }
@@ -155,7 +144,7 @@ background-image: url('images/icon-more.gif');
 .box
 {
 position: relative;
-background: #FDFCF6 url('images/boxbg.gif') repeat-x;
+background: #E1D2BD url('images/boxbg.gif') repeat-x;
 left: -1.5em;
 top: -1.5em;
 padding: 1.5em;
@@ -269,7 +258,7 @@ vertical-align: middle;
 {
 position: relative;
 height: 109px;
-background: #fff url('images/hdrpic.jpg') no-repeat top left;
+background: #fff url('images/banner.png') no-repeat top left;
 margin-bottom: 2px;
 }
 
