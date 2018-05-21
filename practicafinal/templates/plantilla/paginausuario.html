@@ -3,12 +3,21 @@
 {%extends "plantilla/index.html" %}
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="/templates/static/2.css"/>
-<link rel="favicon" href="http://kathedesing.com/wp-content/uploads/2017/05/icono-7.png" type="image/icon" />
+
+
+<style>
+      html{background-color: {{cambiacss | safe}}}
+      html{color:#000000}
+	  a{color:#07f2e4}
+	  html{font-size:10pt}
+      
+    </style>
+
 {% block title %}
 	<a href="/">Inicio</a>
 	<div>
 		{{ title | safe}}
+		
 		<h1>HOLA!</h1>
 
 </div>

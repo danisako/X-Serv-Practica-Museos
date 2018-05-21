@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+   <museos>
+        <titulo> PAGINA XML </titulo>
+        {% for m in museos %}
+			{% if m.comentarios > 0 %}
+            <museo>
+			
+                <nombre>{{ m.nombre }}</nombre>
+                <accesibilidad>{{m.accesibilidad}}</accesibilidad>
+               <direccion>LOCALIZACION
+					<nombre_via>{{ m.nombrevia }}</nombre_via>
+					<barrio>{{m.barrio}}</barrio>
+					<distrito>{{m.distrito}}</distrito>
+		            <localidad>{{ m.localidad }}</localidad>
+		            <provincia>{{ m.provincia }}</provincia>
+		            <distrito>{{ m.distrito }}</distrito>
+				</direccion>
+               <url>URL
+					<enlace>{{m.enlace}}</enlace>
+			   </url>
+
+            </museo>
+			{% endif%}
+        {% endfor %}
+</museos>

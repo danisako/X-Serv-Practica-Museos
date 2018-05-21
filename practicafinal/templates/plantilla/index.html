@@ -13,12 +13,12 @@
 <meta name="keywords" content="" />
 <meta name="description" content="" />
 <link rel="stylesheet" type="text/css" href="/templates/static/1.css"/>
-<link rel="favicon" href="http://kathedesing.com/wp-content/uploads/2017/05/icono-7.png" type="image/icon" />
+<link rel="icon" href="/templates/static/icono.png" type="image/png"/>
 <style>
-      html{background-color: #000000}
+      html{background-color: {{colorcss | safe}}}
       html{color:#000000}
 	  a{color:#07f2e4}
-	  html{font-size:10pt}
+	  html{font-size:{{tamano |safe}}}
       
     </style>
 </head>
@@ -31,7 +31,7 @@
 
 	<div id="header">
 		<div id="headercontent">
-			<h1>APP MUSEOS!!<sup>1.0</sup></h1>
+			<h1>¡¡APP MUSEOS!!<sup>1.0</sup></h1>
 			<h2>aplicacion Django para museos de Madrid</h2>
 			
 		</div>
@@ -40,7 +40,7 @@
 
 
 	<div id="banner">
-		<img src="http://www.reddemuseos.unlp.edu.ar/uploads/assets/banner_museos_large.png" width="100%" height="100"/></div>
+		<img src="/templates/static/banner.png" width="100%" height="100"/></div>
 	<div class="header">
 		<div id = "headerlog">
 			      
@@ -65,8 +65,9 @@
 			<li><a href="/">Home</a></li>
 			<li><a href="/museos">Todos</a></li>
 			<li><a href="/register">Registrarse</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Contact</a></li>
+			<li><a href="/about">About</a></li>
+			<li><a href="/xml"><li>XML</li></a>
+			
 	</div>
 	
 	
@@ -86,7 +87,6 @@
 
 		<p><strong>
 						{% block cargar %}
-						
 							{{cargar|safe}}
 						
 						{% endblock %}
@@ -111,13 +111,9 @@
 				<!-- Primary content area start -->
 		
 				<div class="post">
-					<ul><h3><strong>{{ content | safe}}</strong></h3>
 					<div class="contentarea">	
-						<p>Volutpat at varius sed sollicitudin et, arcu. Vivamus viverra. Nullam turpis. Vestibulum sed etiam. Lorem ipsum sit amet dolore. Nulla facilisi. Sed tortor. Aenean felis. Quisque eros. Cras lobortis commodo metus. Vestibulum vel purus. In eget odio in sapien adipiscing blandit. Quisque augue tortor, facilisis sit amet, aliquam, suscipit vitae, cursus sed, arcu lorem ipsum dolor sit amet.</p>
-						<ul class="controls">
-							<li><a href="#" class="comments">Comentarios {{comentarios | safe}}</a></li>
-							<li><a href="#" class="more">Read More</a></li>				
-						</ul>
+					
+					<ul><h3><strong>{{ content | safe}}</strong></h3>	
 					</div>
 				</div>
 		
@@ -136,20 +132,15 @@
 			
 			<!-- HINT: Set any div's class to "box" to encapsulate it in (you guessed it) a box -->
 			<div class="box">
-				<h4>Blandit Veroeros</h4>
 				<div class="contentarea">
 				<ul><h2>{{ users | safe}}</h2>
-					<img src="images/pic2.jpg" class="header" alt="Random foliage" />
-					<p>Sed etiam et lorem ipsum nulla vero et lobortis felis sed etiam. Lorem ipsum sit amet dolore. Nulla facilisi. Sed tortor. Aenean felis. Quisque eros etiam <a href="#">sed commodo</a>.</p>
 				</div>
 			</div>
 		
 			<div>
-				<h4>Nullam Dolore</h4>
-				<div class="contentarea">
-						<ul><h2>{{ users | safe}}</h2>
-					
-				</div>
+				<div class ="contentarea">
+				<img src="http://aprende.liceus.com/wp-content/uploads/2017/01/26818-944-550-1.jpg" class="header"  width="100%" height="100"/>
+			</div>
 			</div>
 
 			<!-- Secondary content area end -->
@@ -160,8 +151,7 @@
 
 	<div id="footer">
 			
-				<p>Esta aplicación utiliza datos del portal de datos abiertos de la ciudad de Madrid. © Copyright
-				Pagina con los datos del Ayuntamiento de Madrid: <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=118f2fdbecc63410VgnVCM1000000b205a0aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default"> Enlace</a>.Descripcion del <a href="https://datos.madrid.es/egob/catalogo/201132-0-museos.xml">fichero XML</a></p>
+				<p>Esta aplicación utiliza datos del portal de datos abiertos de la ciudad de Madrid. <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=118f2fdbecc63410VgnVCM1000000b205a0aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default"> Enlace</a>.Descripcion del <a href="https://datos.madrid.es/egob/catalogo/201132-0-museos.xml">fichero XML</a></p>
 </div>
 		
 	

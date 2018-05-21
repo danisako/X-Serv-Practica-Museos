@@ -22,10 +22,14 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     url(r'^$',  'museos.views.barra'),
+	url(r'cambiacss', 'museos.views.cambiarcss' ),
     url(r'^admin/', include(admin.site.urls)),
+	url(r'^about', 'museos.views.about'),
+	url(r'^puntuacion/(.+)$', 'museos.views.puntuacion'),
 	url(r'static/(.*)$', serve, {'document_root': 'templates/plantilla'}),
 	url(r'^login',login),
-	url(r'^logout', logout),
+	url(r'^xml','museos.views.xml'),
+	url(r'^logout',logout),
 	url(r'^accounts/profile', 'museos.views.redirect'),
 	url(r'^museos/(.+)$', 'museos.views.paginamuseo'),
 	url(r'^museos', 'museos.views.museos'),

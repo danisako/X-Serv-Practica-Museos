@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import redirect
 import urllib.request
 from xml.sax.handler import ContentHandler
@@ -10,7 +10,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.db.models.functions import Length
 from museos.parse import ParsearMuseos
-from django.contrib.auth import authenticate,login, logout
+from django.contrib.auth import authenticate,login
 from museos import models
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -78,21 +78,22 @@ formulario = """
 def barra(request):
 
 	numero = 0
+	color = ""
+	tamano = ""
 	
 	
-	if request.method == "GET":
 		
 
-		if request.user.is_authenticated():
-			logged = 'Logged in as --> ' + request.user.username + '<a href="/logout">Logout</a></br>'
-			log = True
+	if request.user.is_authenticated():
+		logged = 'Logged in as --> ' + request.user.username + '<a href="/logout">Logout</a></br>'
+		log = True
 
 
-		else:
-			logged = 'Not logged in. <a href = "/login">Login</a></br>'
-			log = False
+	else:
+		logged = 'Not logged in. <a href = "/login">Login</a></br>'
+		log = False
 
-
+	if request.method == "GET":
 
 		museos = Museo.objects.all() #devuelve una lista con todos los museos
 		respuesta = "<ul>"
@@ -105,6 +106,8 @@ def barra(request):
 			if lista.comentarios != 0:
 				respuesta += "Nombre Museo:  <a href="+lista.enlace+">"+lista.nombre+"</a></br> " #Muestro la información de los museos que tengo.			
 				respuesta += "Dirección: " +lista.clasevia+" " + lista.nombrevia + "  "+str(lista.numero) +" Localidad:  "+ lista.localidad + "</br>"
+				respuesta += "Puntuacion: " +str(lista.valoracion)+"</br>"
+				respuesta += "Numero de Comentarios: " +str(lista.comentarios)+"</br>"
 				respuesta+= '<li><a href="/museos/'+str(lista.id)+'"> Mas información </a></br>' #Muestro la página de información para el museo
 			else:
 				respuesta +=""
@@ -166,21 +169,44 @@ def barra(request):
 				respuesta = ""
 				login(request,acceso)
 			else:
-				respuesta = "Ersasa"
+				respuesta = "Error"
 			
-			return HttpResponse(respuesta)
+			
+			return HttpResponseRedirect('/')
+			
+	
 	respuesta+= "<ul>"
-	list_usu = "USUARIOSS"
+	list_usu = "USUARIOS"
 	lista_pag = User.objects.all()
-	user = request.user.username
+	css = Cambiarcss.objects.all()
+	
 	
 	for i in lista_pag:
-		list_usu += "<li><br><a href=" + i.username + ">"
+		list_usu += "<li><br>Pagina de: <a href=" + i.username + ">"
 		list_usu += i.username+ "</a> " 
+	 
 	respuesta+= "</ul>"
+	
+	if request.user.is_authenticated():
+		us = User.objects.get(id = request.user.id)
+		print(us)
+		listacss = Cambiarcss.objects.all()
+		for t in listacss:
+			print(t.nombre)
+			if t.nombre == us:
+				color = t.color
+				tamano = t.tamano
+				print(color)
+			else:
+				print("no hay color")
 
+	else:
+			respuesta += "Logeatee"
+
+	
+	
 	template = get_template("plantilla/index.html")
-	c = Context({'users':list_usu ,'log':log, 'logeado': logged , 	'content':respuesta  , 'usuario':request.user.username,'accesibles': boton,'cargar':form,'login':formulario,'comentarios':numero})
+	c = Context({'users':list_usu ,'log':log,'tamano':tamano, 'colorcss':color, 'logeado': logged , 	'content':respuesta  , 'usuario':request.user.username,'accesibles': boton,'cargar':form,'login':formulario,'comentarios':numero})
 	
 	return HttpResponse(template.render(c))
 
@@ -196,6 +222,7 @@ def paginausuario(request,user):
 	favoritos = Favoritos.objects.all().filter(usuario= usuarios.id)
 	
 	color = ""
+	tamano =""
 
 	if request.method == "GET":
 		
@@ -204,26 +231,33 @@ def paginausuario(request,user):
 			respuesta += "Fecha seleccionado: "+str(f.fecha)+"</br></br></br>"
 	
 		respuesta += """
-		<form action = "" method ="POST">
+		<form action = "/cambiacss" method ="POST">
 			<label>Color: </label>
-			<input type="radio" name = "fondo" value="#FFFFFF">Default
+			<input type="radio" name = "fondo" value="#fa1b09">Rojo
 			<input type="radio" name = "fondo" value="#7fb3d5">Azul
+			<input type="radio" name = "tamaño" value="10">Tamaño 10
+			<input type="radio" name = "tamaño" value="16">Tamaño 16
 			<input type="submit" value="Cambiar">
 			</form>
 	"""
-	elif request.method == "POST":
-		color = request.POST['fondo']
-		nuevocss = Cambiarcss(nombre = usuarios,color = color)
-		nuevocss.save()
+	if request.user.is_authenticated():
+		us = User.objects.get(id = request.user.id)
+		print(us)
+		listacss = Cambiarcss.objects.all()
+		for t in listacss:
+			
+			if t.nombre == us:
+				color = t.color
+				tamano = t.tamano
+				
+			else:
+				print("no hay color")
 
-		
-		
-		
-	print(color)
-		
+	else:
+			respuesta += "Logeatee"
 
 	template = get_template("plantilla/paginausuario.html")
-	c = Context({ 'title': respuesta , 	'content':respuesta  , 'cambiacss':color,'usuario':request.user.username})
+	c = Context({ 'title': respuesta , 	'content':respuesta  , 'cambiacss':color,'tamano':tamano,'usuario':request.user.username})
 	
 	return HttpResponse(template.render(c))
 
@@ -254,12 +288,13 @@ def usuarios(request):
 @csrf_exempt
 def museos(request):
 	museos = Museo.objects.all()
-	respuesta = "<h2>LISTA CON TODOS LOS MUSEOS</h2><ul>"
+	respuesta = "<h2>LISTA CON TODOS LOS MUSEOS</h2>"
 
 	respuesta = filtro
 	if request.method == "GET":
 		for m in museos:
-			respuesta += "Nombre Museo:  "+m.nombre+"</br>" #Muestro la información de los museos que tengo.
+			respuesta += "<li>Nombre Museo:  "+m.nombre+"</br>" #Muestro la información de los museos que tengo.
+		
 			
 			if request.user.is_authenticated():
 				respuesta+= "Para guardar como favorito, pulsa: <a href='/favoritos/"+str(m.id)+"/"+request.user.username+"'>Favorito</a></br>"
@@ -267,15 +302,21 @@ def museos(request):
 				respuesta += "No estás logueado, haz click para entrar y poder marcar como favorito</br> <a href = '/login'>Login</a></br>"	
 			respuesta += ""
 			respuesta+= '<li><a href="museos/'+str(m.id)+'">Enlace</a></br></br>' #Muestro la página de información para el museo
-			respuesta+= "</ul>"
+			
 
 	elif request.method == "POST":
 		filtros = Museo.objects.filter(distrito = request.POST['filtrar'])
 		for m in filtros:
-			respuesta += "<li>Nombre:" +m.nombre + " Distrito: " +m.distrito + "</li></br></br>"		
+			respuesta += "<li>Nombre:" +m.nombre + " Distrito: " +m.distrito + "</li></br></br>"
+	color =""
+	css = Cambiarcss.objects.all()
+	for t in css:
+				if t.nombre == request.user.username:
+					color = t.color
+					print(t.color)	
 
 	template = get_template("plantilla/museos.html")
-	c = Context({ 'content':respuesta})
+	c = Context({ 'content':respuesta,'cambiacss':color})
 	return HttpResponse(template.render(c))
 		
 @csrf_exempt
@@ -285,6 +326,7 @@ def paginamuseo(request,identificador):
 	com = Comentario.objects.all().filter(museo_id = identificador)
 	respuesta = "<h3>BIENVENIDO A LA PÁGINA DEL MUSEO:</h3></br>"
 	respuesta +="Nombre: "+ museos.nombre +"</br> Accesibilidad: "+ str(museos.accesibilidad) +"</br>Distrito:"+ museos.distrito +"</br>Barrio:"+museos.barrio+ "</br> Número Comentarios:" + str(museos.comentarios)+"</br>"
+	respuesta += "Para puntuar el museo, click aquí: <a href='/puntuacion/"+str(museos.id)+"'>Me gusta</a></br>"
 	for i in com:
 		if museos.comentarios == "0":
 			respuesta += "NO hay comentarios </br>"
@@ -329,31 +371,76 @@ def redirect(request):
 def favoritos(request,mus,us):
 	museos = Museo.objects.get(id = mus)
 	usuarios = User.objects.get(username = us)
-	respuesta = "Pagina de:" +us
-	museofavorito = Favoritos(usuario =usuarios, museo = museos, titulo = respuesta)
+	museofavorito = Favoritos(usuario =usuarios, museo = museos)
 	fav = Favoritos.objects.all().filter(usuario_id = usuarios.id)
-	print(museofavorito.museo)
+
 	museofavorito.save()
 	for f in fav:
 		if f.museo:
-
-			respuesta +="Museo ya añadido"
+			respuesta ="Museo añadido"
 		else:
-			respuesta += "added!!!"+str(museofavorito.museo)
+			respuesta = "added!!!"+str(museofavorito.museo)
 			museofavorito.save()
 
 	
-	return HttpResponse(respuesta)
-
+	return HttpResponseRedirect("/")
+@csrf_exempt
 def cambiarcss(request):
-		
+	color = ""
 	if request.user.is_authenticated():
 		color = request.POST['fondo']
+		tamano = request.POST['tamaño']
+		print(color)	
 		usuario = User.objects.get(username = request.user.username)
-		cambios = CSS.objects.get(nombre = usuario,color = color)
-	return HttpResponse("eee")
+		print(usuario)
+		css = Cambiarcss.objects.all()
+				
+		if len(css) == 0:
+			cambio = Cambiarcss(nombre = usuario, color = color, tamano = tamano)
+			cambio.save()
+			print("añado cssuser")
+			
+		else:
+			for t in css:
+				if t.nombre == usuario:
+					t.color = color
+					t.tamano = tamano
+					t.save()
+					print(t.color)
+				else:
+					cambio = Cambiarcss(nombre = usuario, color = color, tamano = tamano)
+					cambio.save()
+					print("color añadido nuevo")
+	
+			
+		
+	template = get_template("plantilla/index.html")
+	c = Context({'colorcss':color })
 
+	return HttpResponseRedirect("/")
+
+def about(request):
+    template = get_template("plantilla/about.html")
+    
+    c = Context(request)
+    return HttpResponse(template.render(c))
 	
 
-	
+@csrf_exempt
+def puntuacion(request,identificador):
+	museos = Museo.objects.get(id = identificador)
+	museos.valoracion = museos.valoracion + 1
+	museos.save()
+
+	return HttpResponseRedirect("/")
+
+def xml(request):
+    template = get_template("plantilla/index.xml")
+    museo = Museo.objects.all().order_by('-comentarios')
+
+    c = Context({'museos': museo,})
+    return HttpResponse(template.render(c),content_type = "text/xml")
+		
+
+
 

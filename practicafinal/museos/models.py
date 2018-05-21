@@ -55,8 +55,8 @@ class Comentario(models.Model):
 	
 class Cambiarcss(models.Model):
 	nombre = models.ForeignKey(User)
-	color = models.CharField(default="blue", max_length=32)
-	tamano = models.IntegerField(default=15)
+	color = models.CharField(default="#000000", max_length=32)
+	tamano = models.CharField(default="10pt",max_length = 32)
 
 class Favoritos(models.Model):
 	usuario = models.ForeignKey(User)
